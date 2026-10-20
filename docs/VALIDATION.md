@@ -38,13 +38,15 @@ Host: Android ARM64 (`aarch64`, ABI `arm64-v8a`). Dart 3.12.2 native Android, No
 
 ## Hosted build attempts after user authorization
 
-GitHub CLI 2.95.0 is authenticated as the repository owner. With user authorization, source was scanned for common credential patterns, committed and pushed to **private** repository https://github.com/anzmage/pocket-browser-ai. No AI key, credential file, local caches or unrelated project files were uploaded.
+GitHub CLI 2.95.0 is authenticated as the repository owner. With user authorization, source was scanned for common credential patterns, committed and pushed to initially **private** repository https://github.com/anzmage/pocket-browser-ai. The user subsequently authorized changing it to **public**; tracked source was scanned again before the visibility change. No AI key, credential file, local caches or unrelated project files were uploaded.
 
 - Build dispatch at source commit `15a2b0c`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421288514 — `completed/startup_failure`, zero jobs, no logs/artifacts.
 - After pinning Actions to current official releases at commit `1596bc1`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421618299 — same `startup_failure`, zero jobs.
 - Minimal `runner-check.yml` at commit `8b4839a`, no external action or build tool, just `printf`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421794826 — also `startup_failure`, zero jobs.
-- Repository Actions permissions API reports enabled / all actions allowed. GitHub Status reports operational. REST checks provide no detailed startup annotation or error log. Billing API is unavailable with the current token's scopes; no extra scopes, billing changes, charges, visibility changes or alternate-server builds were attempted.
-- This demonstrates failure before a hosted runner/build starts; it does **not** identify a specific billing, account, or service cause. The next necessary diagnostic is the detailed error visible to the owner on the Actions run page. Do not repeat identical dispatches blindly.
+- Repository Actions permissions API reports enabled / all actions allowed. GitHub Status reports operational. The initial startup failures provided no detailed API annotation. The user supplied the GitHub error about failed recent payments or spending limit.
+- After the authorized visibility change to public, runner diagnostic https://github.com/anzmage/pocket-browser-ai/actions/runs/39422280694 completed with `failure`. Job `check` ID `118625982996` was rejected before execution. `gh run view` now exposes the exact annotation: **“The job was not started because your account is locked due to a billing issue.”** No runner log exists because no command started.
+- Public visibility did not remove the account-level billing lock. No application build or APK was produced. The user chose to continue with GitHub rather than migrate to GitLab. Restore the account's billing/Actions eligibility before another dispatch; do not blindly repeat identical runs.
+- No billing settings, paid spending limits, extra token scopes or alternate-server builds were changed.
 
 ## Not executed / outstanding
 - No `flutter test`, `flutter analyze`, Gradle build or APK build was executed; Flutter engine and Android build host are unavailable here.
@@ -52,4 +54,4 @@ GitHub CLI 2.95.0 is authenticated as the repository owner. With user authorizat
 - jsdom overrides element geometry because it has no rendering/layout. It validates DOM contracts, not actual viewport hit-testing or Android framework behavior.
 - Official OpenAI API web documentation returned HTTP 403; request shape was cross-checked against the official OpenAI SDK source instead.
 
-Next: inspect the startup error on the linked GitHub Actions page and resolve the reported account/platform blocker; then dispatch the Android workflow again. After a green build, install its artifact and follow the fixture smoke test in README. Inspect the actual on-device behavior before using real account tasks or sensitive pages. Never report a build/APK/website compatibility success merely from these static/mock checks.
+Next: the account owner must resolve the confirmed billing lock at https://github.com/settings/billing (or with GitHub Support if it persists), then dispatch the Android workflow again. After a green build, install its artifact and follow the fixture smoke test in README. Inspect the actual on-device behavior before using real account tasks or sensitive pages. Never report a build/APK/website compatibility success merely from these static/mock checks.

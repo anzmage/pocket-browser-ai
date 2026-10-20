@@ -1,0 +1,10 @@
+name: Runner availability check
+on: workflow_dispatch
+permissions: {}
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Verify hosted runner can start
+        run: printf 'GitHub hosted runner started successfully.\n'

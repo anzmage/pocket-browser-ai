@@ -36,12 +36,20 @@ Host: Android ARM64 (`aarch64`, ABI `arm64-v8a`). Dart 3.12.2 native Android, No
 - Official Gradle wrapper JAR SHA-256 matched the value checked in workflow; distribution checksum fetched from official Gradle endpoint and pinned in wrapper properties.
 - `git diff --check`: clean. Basic known-token-pattern scan of deliverable source: no matches. This is not a comprehensive secret audit. No real AI keys, website accounts or paid AI calls were used.
 
-## Not executed / outstanding
+## Hosted build attempts after user authorization
 
-- GitHub Actions has **not** been dispatched or run from this session. Repository has no remote, commit or push. Local Git was initialized only for review/diff checking. GitHub CLI 2.95.0 was installed from the configured Termux package repository; `gh auth status` confirms no GitHub login is available. Browser login and authorization to upload this project's source are required before a hosted build.
+GitHub CLI 2.95.0 is authenticated as the repository owner. With user authorization, source was scanned for common credential patterns, committed and pushed to **private** repository https://github.com/anzmage/pocket-browser-ai. No AI key, credential file, local caches or unrelated project files were uploaded.
+
+- Build dispatch at source commit `15a2b0c`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421288514 — `completed/startup_failure`, zero jobs, no logs/artifacts.
+- After pinning Actions to current official releases at commit `1596bc1`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421618299 — same `startup_failure`, zero jobs.
+- Minimal `runner-check.yml` at commit `8b4839a`, no external action or build tool, just `printf`: https://github.com/anzmage/pocket-browser-ai/actions/runs/39421794826 — also `startup_failure`, zero jobs.
+- Repository Actions permissions API reports enabled / all actions allowed. GitHub Status reports operational. REST checks provide no detailed startup annotation or error log. Billing API is unavailable with the current token's scopes; no extra scopes, billing changes, charges, visibility changes or alternate-server builds were attempted.
+- This demonstrates failure before a hosted runner/build starts; it does **not** identify a specific billing, account, or service cause. The next necessary diagnostic is the detailed error visible to the owner on the Actions run page. Do not repeat identical dispatches blindly.
+
+## Not executed / outstanding
 - No `flutter test`, `flutter analyze`, Gradle build or APK build was executed; Flutter engine and Android build host are unavailable here.
 - No real Android WebView interaction, Android lifecycle/Back/keyboard test, secure-storage instrumentation test, real provider request or live website login was performed.
 - jsdom overrides element geometry because it has no rendering/layout. It validates DOM contracts, not actual viewport hit-testing or Android framework behavior.
 - Official OpenAI API web documentation returned HTTP 403; request shape was cross-checked against the official OpenAI SDK source instead.
 
-Next: run the prepared Actions workflow from the phone; after a green build, install its artifact and follow the fixture smoke test in README. Inspect the actual on-device behavior before using real account tasks or sensitive pages. Never report a build/APK/website compatibility success merely from these static/mock checks.
+Next: inspect the startup error on the linked GitHub Actions page and resolve the reported account/platform blocker; then dispatch the Android workflow again. After a green build, install its artifact and follow the fixture smoke test in README. Inspect the actual on-device behavior before using real account tasks or sensitive pages. Never report a build/APK/website compatibility success merely from these static/mock checks.

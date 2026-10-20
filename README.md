@@ -7,14 +7,16 @@ Browser Flutter satu tab + agent foreground pada **WebView yang sama** tempat An
 - Host pengembangan: Termux Android ARM64; Dart 3.12.2 tersedia. Flutter binary, Java, Gradle dan Android SDK tidak tersedia.
 - Build desktop Android resmi bukan toolchain native Termux. Tidak dilakukan instalasi binary Linux acak atau percobaan build berulang.
 - Pemeriksaan yang benar-benar dijalankan dicatat di [`docs/VALIDATION.md`](docs/VALIDATION.md).
-- **Belum ada APK hasil build atau pengujian Android WebView nyata.** Workflow Linux siap dijalankan, tetapi belum dijalankan dari sesi ini. Keberhasilan build pertama harus dilihat dari log Actions, bukan diasumsikan.
+- **Belum ada APK hasil build atau pengujian Android WebView nyata.** Source sudah di-push dengan izin pengguna ke repo private `anzmage/pocket-browser-ai`. Dua dispatch build dan satu dispatch diagnostik runner gagal `startup_failure` sebelum job berjalan; tidak ada log kompilasi/artifact. Lihat `docs/VALIDATION.md` untuk bukti. Penyebab spesifik perlu diperiksa dari pesan error pada halaman Actions GitHub; jangan mengasumsikan build berhasil atau billing pasti penyebabnya.
 
 ## Build dari HP (GitHub Actions)
 
-Seluruh isi direktori ini harus menjadi **root repository** (bukan direktori `browserx` di atasnya). Workflow ada di `.github/workflows/android.yml`.
+Repository proyek ini sudah tersedia di https://github.com/anzmage/pocket-browser-ai (private). Tidak perlu membuatnya ulang. Workflow ada di `.github/workflows/android.yml`; `runner-check.yml` adalah diagnostik satu perintah tanpa setup/dependency untuk memastikan runner dapat mulai.
+
+Langkah berikut untuk menyiapkan salinan di repository lain: seluruh isi direktori ini harus menjadi **root repository**, bukan direktori `browserx` di atasnya.
 
 1. Buat repository GitHub pribadi kosong melalui browser HP, tanpa README tambahan. Tidak perlu memasukkan API key atau GitHub Actions secret AI.
-2. Dari Termux, ganti `OWNER/REPO` dengan repository milik Anda. Perintah berikut adalah langkah **opsional yang Anda jalankan sendiri untuk mengotorisasi publikasi**; agent belum melakukan push:
+2. Dari Termux, ganti `OWNER/REPO` dengan repository milik Anda. Perintah berikut adalah contoh **opsional untuk repository baru**; jangan menimpa remote proyek yang sudah ada:
 
    ```bash
    cd ~/browserx/pocket_browser_ai
@@ -123,4 +125,4 @@ Snapshot diikat ke ID, URL lengkap internal, revision MutationObserver/input/cha
 
 ## Referensi resmi
 
-Versi/API diperiksa dari metadata dan source resmi package, source Flutter 3.35.7, template Android dan Gradle. Lihat [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md). Tidak ada aplikasi/server lain yang diubah, dan tidak ada repository yang di-push oleh agent.
+Versi/API diperiksa dari metadata dan source resmi package, source Flutter 3.35.7, template Android dan Gradle. Lihat [`docs/DEPENDENCIES.md`](docs/DEPENDENCIES.md). Tidak ada aplikasi/server lain yang diubah. Hanya repository private proyek ini yang dibuat dan di-push setelah pengguna mengotorisasi proses build.

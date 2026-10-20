@@ -1,0 +1,57 @@
+name: Android debug APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Gradle wrapper
+        shell: bash
+        run: |
+          echo '2db75c40782f5e8ba1fc278a5574bab070adccb2d21ca5a6e5ed840888448046  android/gradle/wrapper/gradle-wrapper.jar' | sha256sum -c -
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: stable
+          cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: |
+          flutter --version
+          flutter pub get --enforce-lockfile
+          npm ci --ignore-scripts --no-audit --no-fund
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+      - name: Test agent with mock provider
+        run: flutter test --reporter expanded
+      - name: Test DOM observation and actions
+        run: npm test
+      - name: Build Android ARM debug APK
+        run: flutter build apk --debug --target-platform android-arm64,android-arm
+      - name: Upload APK, dependency lock and checksum
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-debug.apk dist/pocket-browser-ai-debug.apk
+          cp pubspec.lock dist/
+          cd dist
+          sha256sum pocket-browser-ai-debug.apk > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pocket-browser-ai-debug
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

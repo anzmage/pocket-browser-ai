@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pocket Browser Fixture</title>
+<style>body{font:18px system-ui;padding:16px;background:#f3faf9;color:#123}label{display:block;margin:12px 0}input,textarea,select,button{font:inherit;padding:10px;max-width:90%}#result{padding:12px;background:#cfece2}a{display:inline-block;padding:12px}.spacer{height:650px}</style></head>
+<body><main><h1>Fixture lokal</h1><p>Tidak memakai akun atau jaringan. Isi nama Pocket dan pilih Biru, lalu klik Tampilkan hasil.</p>
+<a href="#detail">Lihat detail</a>
+<label>Nama tampilan <input id="display-name" name="display-name" autocomplete="off"></label>
+<label>Warna <select id="color" name="color"><option value="merah">Merah</option><option value="biru">Biru</option><option value="hijau">Hijau</option></select></label>
+<label>Catatan <textarea id="notes" name="notes"></textarea></label>
+<button id="preview" type="button">Tampilkan hasil</button>
+<p id="result" role="status">Belum ada hasil</p>
+<p id="event-status">Input/change: 0</p>
+<button id="save" type="button">Simpan perubahan demo</button>
+<button type="button" disabled>Nonaktif</button>
+<label>Password (manual, jangan dikirim) <input id="password" type="password" value="fixture-password-not-for-model"></label>
+<label>OTP (manual) <input id="otp" autocomplete="one-time-code" value="765432"></label>
+<input type="hidden" name="csrf_token" value="fixture-hidden-token-not-for-model">
+<div hidden>hidden-private-content</div>
+<div class="spacer"></div><h2 id="detail">Detail</h2><p>Agent dapat scroll ke bagian ini.</p><a href="https://example.com">Example HTTPS</a>
+<a href="intent://not-allowed">Skema eksternal diblokir</a>
+</main><script>
+let count = 0;
+for (const event of ['input','change']) document.addEventListener(event, () => {
+  document.getElementById('event-status').textContent = 'Input/change: ' + (++count);
+});
+document.getElementById('preview').addEventListener('click', () => {
+  setTimeout(() => {
+    document.getElementById('result').textContent = 'Hasil: ' + document.getElementById('display-name').value + ' / ' + document.getElementById('color').value;
+  }, 200);
+});
+document.getElementById('save').addEventListener('click', () => {
+  document.getElementById('result').textContent += ' — tersimpan (demo lokal saja)';
+});
+</script></body></html>

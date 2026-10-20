@@ -1,0 +1,22 @@
+name: pocket_browser_ai
+description: Private single-tab WebView browser with a foreground BYOK AI agent.
+publish_to: none
+version: 0.1.0+1
+environment:
+  sdk: '>=3.9.0 <4.0.0'
+  flutter: '>=3.35.7'
+dependencies:
+  flutter:
+    sdk: flutter
+  webview_flutter: 4.13.0
+  webview_flutter_android: 4.10.0
+  webview_flutter_wkwebview: 3.23.0
+  flutter_secure_storage: 9.2.4
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/observer.js
+    - assets/fixture.html

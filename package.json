@@ -1,0 +1,6 @@
+{
+  "name": "pocket-browser-ai-dom-checks",
+  "private": true,
+  "scripts": {"test": "node --test tool/observer.test.cjs"},
+  "devDependencies": {"jsdom": "26.1.0"}
+}
